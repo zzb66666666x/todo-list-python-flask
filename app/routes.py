@@ -6,7 +6,7 @@ from app import database as db_helper
 @app.route("/delete/<int:task_id>", methods=['POST'])
 def delete(task_id):
     """ recieved post requests for entry delete """
-
+    
     try:
         db_helper.remove_task_by_id(task_id)
         result = {'success': True, 'response': 'Removed task'}
