@@ -6,7 +6,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import MetaData, inspect, create_engine
 
-engine = sqlalchemy.create_engine(
+engine = create_engine(
     sqlalchemy.engine.url.URL.create(
         drivername="mysql+pymysql",
         username="root",
