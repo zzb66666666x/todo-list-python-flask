@@ -1,5 +1,6 @@
 """ Specifies routing for the application"""
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, make_response
+from werkzeug.utils import redirect
 from app import app
 from app import database as db_helper
 
@@ -46,8 +47,40 @@ def create():
     return jsonify(result)
 
 
-@app.route("/")
+@app.route("/", methods=['GET'])
 def homepage():
     """ returns rendered homepage """
+    status = {"login":False, "usr": "None"}
+    user_id = request.cookies.get('userID')
+    print(user_id)
+    if user_id != None:
+        status["usr"] = user_id
+        status["login"] = True
     items = db_helper.fetch_todo()
-    return render_template("index.html", items=items)
+    return render_template("index.html", items=items, status = status)
+
+@app.route("/logout", methods=['POST'])
+def logout():
+    user_id = request.cookies.get('userID')
+    print("current user is: ", user_id)
+    status = {"login":False, "usr": "None"}
+    items = db_helper.fetch_todo()
+    resp = make_response(render_template("index.html", items=items, status = status))
+    resp.delete_cookie(user_id)
+    return resp
+
+@app.route("/login", methods=['POST'])
+def login_validate():
+    requested_username = request.form['username']
+    requested_password = request.form['password']
+    status = {"login":False, "usr": "None"}
+    items = db_helper.fetch_todo()
+    # print(data)
+    if requested_username == 'zzb' and requested_password == "123456":
+        status["login"] = True
+        status["usr"] = requested_username
+        response = make_response(render_template("index.html", items = items, status = status))
+        response.set_cookie('userID', requested_username)
+        response.set_cookie('user_pword', requested_password)
+        return response
+    return render_template("index.html", items = items, status = status)

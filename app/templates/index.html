@@ -20,11 +20,27 @@
 
     <main role="main" class="container extra-bottom">
       <h1 class="mt-5">TODO List Demo App</h1>
-      <p><mark>Do it now.</mark></p>
+      <p><mark>User: {{status.usr}}</mark></p>
+
     </main>
-    
+
 
     <div class="container">    
+
+        <form action="/login" method="POST">
+
+            <!-- Username Field -->
+            <input type="text" name="username" placeholder="Username">
+    
+            <!-- Password Field -->
+            <input type="password" name="password" placeholder="Password">
+    
+            <!-- Login Button -->
+            <input type="submit" value="Login">
+            <input type="submit" formaction="/logout" value="Logout"></input>
+        </form>
+
+        <br>
         
         <!-- Button trigger modal -->
         <div style="text-align: right;">
